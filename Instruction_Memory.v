@@ -23,7 +23,6 @@ module Instruction_Memory(CLK,WR,A,D_IN,Q);
 
     always@(posedge CLK)begin
         if(WR)
-            out<=4'bxxxx;
             SRAM[A]<=D_IN;
         else
             out<=SRAM[A];
