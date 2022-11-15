@@ -10,7 +10,7 @@ module Instruction_Decoder(Instruction,DA,AA,BA,MB,FS,MD,RW,MW,PL,JB,BC);
     assign BA = Instruction[1:0];
     assign MB = Instruction[12];
     assign FS[3:1] = Instruction[9:7];
-    assign FS[0] = 6&(~PL);
+    assign FS[0] = Instruction[6]&(~PL);
     assign MD = Instruction[10];
     assign RW = ~Instruction[11];
     assign MW = Instruction[11] & (~Instruction[12]);
@@ -19,3 +19,4 @@ module Instruction_Decoder(Instruction,DA,AA,BA,MB,FS,MD,RW,MW,PL,JB,BC);
     assign BC = Instruction[6];
 
 endmodule
+
