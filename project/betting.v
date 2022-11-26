@@ -1,3 +1,0 @@
-module betting();
-
-endmodule
