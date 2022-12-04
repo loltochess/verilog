@@ -1,4 +1,4 @@
-`timescale 10ms/1ps
+`timescale 100us/1ps
 module testbench;
     reg clk,resetn;
     reg [3:0] enable;
