@@ -1,5 +1,7 @@
-module clock(clk,resetn,h,m,s);
+module clock(clk,resetn,enable,set_hour,set_minute,set_second,h,m,s);
     input clk,resetn;
+    input [3:0] enable;
+    input [7:0] set_hour,set_minute,set_second;
     output [7:0] h,m,s;
 
     reg [5:0] second,minute;
@@ -11,7 +13,12 @@ module clock(clk,resetn,h,m,s);
             minute<=0;
             hour<=0;
         end
-        else if(clk)begin
+        else if(enable==4'b0100) begin//time stop and set clock
+            hour<=10*set_hour[7:4]+set_hour[3:0];
+            minute<=10*set_minute[7:4]+set_minute[3:0];
+            second<=10*set_second[7:4]+set_second[3:0];
+        end
+        else begin
             second<=second+1;
             if(second==60) begin
                 second<=0;

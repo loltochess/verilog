@@ -12,7 +12,7 @@ module clock_divide(clk,resetn,clk_divided);
         end
     else begin
         count=count+1;
-        if(count>=400) begin
+        if(count>=500) begin
             count<=0; clk_divided<=~clk_divided;
         end
     end

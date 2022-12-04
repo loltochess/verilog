@@ -1,6 +1,7 @@
-module textlcd(clk,resetn,hour,minute,second,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
+module textlcd(clk,resetn,enable,hour,minute,second,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
 
 input resetn,clk;
+input [3:0] enable;
 input [7:0] hour,minute,second;//7:4-> 10자리 3:0 -> 1자리
 output LCD_E,LCD_RS,LCD_RW;
 output [7:0]LCD_DATA;
@@ -44,14 +45,14 @@ begin
    if(!resetn) state = delay;
    else
    begin   
-      case(state)
+      case(state)//line1,line2,delay,clear_disk에 500CNT --> 500hz == 1s
          delay:            if(CNT==70)    state = function_set;
          function_set:     if(CNT==30)    state = disp_onoff;
          disp_onoff:       if(CNT==30)    state = entry_mode;
          entry_mode:       if(CNT==30)    state = line1;
          line1:            if(CNT==20)    state = line2;
          line2:            if(CNT==20)    state = delay_t;
-         delay_t:          if(CNT==200)   state = clear_disp;
+         delay_t:          if(CNT==360)   state = clear_disp;
          clear_disp:       if(CNT==100)   state = line1;
          default:                         state = delay;
       endcase
@@ -77,7 +78,7 @@ begin
                            else CNT=CNT+1;
             line2:         if(CNT>=20)CNT=0;
                            else CNT=CNT+1;
-            delay_t:         if(CNT>=200)CNT=0;
+            delay_t:         if(CNT>=360)CNT=0;
                            else CNT=CNT+1;
             clear_disp:    if(CNT>=100)CNT=0;
                            else CNT=CNT+1;
@@ -95,8 +96,14 @@ begin
    end
    else
    begin
+      if(enable==4'b1000) begin
       line1_data={blank,blank,blank,blank,blank,blank,C,L,O,C,K,blank,M,O,D,E};
       line2_data={blank,blank,blank,blank,blank,blank,blank,blank,zero+{4'b0,hour[7:4]},zero+{4'b0,hour[3:0]},colon,zero+{4'b0,minute[7:4]},zero+{4'b0,minute[3:0]},colon,zero+{4'b0,second[7:4]},zero+{4'b0,second[3:0]}};
+      end
+      else if(enable==4'b0100) begin
+      line1_data={blank,blank,blank,blank,blank,blank,blank,S,E,T,blank,C,L,O,C,K};
+      line2_data={blank,blank,blank,blank,blank,blank,blank,blank,zero+{4'b0,hour[7:4]},zero+{4'b0,hour[3:0]},colon,zero+{4'b0,minute[7:4]},zero+{4'b0,minute[3:0]},colon,zero+{4'b0,second[7:4]},zero+{4'b0,second[3:0]}};
+      end
    end
 end
 
