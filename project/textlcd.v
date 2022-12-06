@@ -1,7 +1,8 @@
-module textlcd(clk,resetn,enable,hour,minute,second,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
+module textlcd(clk,resetn,enable,stopwatch_clock,alarm_clock,hour,minute,second,LCD_E,LCD_RS,LCD_RW,LCD_DATA);
 
 input resetn,clk;
 input [3:0] enable;
+input [23:0] stopwatch_clock,alarm_clock;
 input [7:0] hour,minute,second;//7:4-> 10자리 3:0 -> 1자리
 output LCD_E,LCD_RS,LCD_RW;
 output [7:0]LCD_DATA;
@@ -91,18 +92,25 @@ always @(negedge resetn or posedge clk)
 begin
    if(!resetn)
    begin
-      line1_data={blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank};
+      line1_data={blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,H,E,L,L,O};
       line2_data={blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank};
    end
    else
    begin
-      if(enable==4'b1000) begin
+      if(enable==4'b1000) begin//clock
       line1_data={blank,blank,blank,blank,blank,blank,C,L,O,C,K,blank,M,O,D,E};
       line2_data={blank,blank,blank,blank,blank,blank,blank,blank,zero+{4'b0,hour[7:4]},zero+{4'b0,hour[3:0]},colon,zero+{4'b0,minute[7:4]},zero+{4'b0,minute[3:0]},colon,zero+{4'b0,second[7:4]},zero+{4'b0,second[3:0]}};
       end
-      else if(enable==4'b0100) begin
+      else if(enable==4'b0100) begin//setclock
       line1_data={blank,blank,blank,blank,blank,blank,blank,S,E,T,blank,C,L,O,C,K};
       line2_data={blank,blank,blank,blank,blank,blank,blank,blank,zero+{4'b0,hour[7:4]},zero+{4'b0,hour[3:0]},colon,zero+{4'b0,minute[7:4]},zero+{4'b0,minute[3:0]},colon,zero+{4'b0,second[7:4]},zero+{4'b0,second[3:0]}};
+      end
+      else if(enable==4'b0010) begin//stopwatch
+      
+      end
+      else if(enable==4'b0001) begin//alarm
+      line1_data={blank,blank,blank,blank,N,O,W,blank,blank,zero+{4'b0,hour[7:4]},zero+{4'b0,hour[3:0]},colon,zero+{4'b0,minute[7:4]},zero+{4'b0,minute[3:0]},colon,zero+{4'b0,second[7:4]},zero+{4'b0,second[3:0]}};
+      line2_data={blank,blank,A,L,A,R,M,blank,blank,zero+{4'b0,alarm_clock[23:20]},zero+{4'b0,alarm_clock[19:16]},colon,zero+{4'b0,alarm_clock[15:12]},zero+{4'b0,alarm_clock[11:8]},colon,zero+{4'b0,alarm_clock[7:4]},zero+{4'b0,alarm_clock[3:0]}};
       end
    end
 end
