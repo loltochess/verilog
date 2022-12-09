@@ -1,10 +1,9 @@
-module piezo(CLK, rst_x, valid, M, PIEZO);
+module piezo(CLK, rst_x, valid, M, BUFF);
 	
 	input CLK, rst_x, valid;
 	input[11:0] M;
-	output wire PIEZO;
+	output reg BUFF;
 	integer CN_SOUND, LIMIT;
-	reg BUFF;
 
 	parameter hz=1000000,C=264,D=293,E=329,F=349,G=392,A=440,B=494;
 
@@ -49,5 +48,4 @@ module piezo(CLK, rst_x, valid, M, PIEZO);
 		end
 	end
 		
-	assign PIEZO = BUFF;
 endmodule	

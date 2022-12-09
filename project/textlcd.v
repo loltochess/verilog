@@ -46,15 +46,15 @@ begin
    if(!resetn) state = delay;
    else
    begin   
-      case(state)//line1,line2,delay,clear_disk에 500CNT --> 500hz == 1s
+      case(state)//line1,line2,delay,clear_disk에 500CNT --> 1000hz == 1s
          delay:            if(CNT==70)    state = function_set;
          function_set:     if(CNT==30)    state = disp_onoff;
          disp_onoff:       if(CNT==30)    state = entry_mode;
          entry_mode:       if(CNT==30)    state = line1;
          line1:            if(CNT==20)    state = line2;
          line2:            if(CNT==20)    state = delay_t;
-         delay_t:          if(CNT==360)   state = clear_disp;
-         clear_disp:       if(CNT==100)   state = line1;
+         delay_t:          if(CNT==410)   state = clear_disp;
+         clear_disp:       if(CNT==50)   state = line1;
          default:                         state = delay;
       endcase
    end
@@ -79,9 +79,9 @@ begin
                            else CNT=CNT+1;
             line2:         if(CNT>=20)CNT=0;
                            else CNT=CNT+1;
-            delay_t:         if(CNT>=360)CNT=0;
+            delay_t:         if(CNT>=410)CNT=0;
                            else CNT=CNT+1;
-            clear_disp:    if(CNT>=100)CNT=0;
+            clear_disp:    if(CNT>=50)CNT=0;
                            else CNT=CNT+1;
             default:         CNT=0;
          endcase

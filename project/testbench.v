@@ -1,4 +1,4 @@
-`timescale 100us/1ps
+`timescale 100ns/1ps
 module testbench;
     reg clk,resetn;
     reg switch;
@@ -17,12 +17,12 @@ module testbench;
         $dumpvars(-1,m1);
         clk<=0;
         resetn<=1;
-        #3 resetn<=0;
-        #1 resetn<=1;
+        #300 resetn<=0;
+        #100 resetn<=1;
         #10000;
-        enable<=4'b0100;
+        enable<=4'b0100;//clockset
         #500 keypad_in<=12'b000000000001; //1
-        #100 keypad_in<=12'b0;
+        #100000 keypad_in<=12'b0;
         #500 keypad_in<=12'b100000000000; //#
         #100 keypad_in<=12'b0;
         #500 keypad_in<=12'b010000000000; //0
@@ -47,8 +47,8 @@ module testbench;
         #100 keypad_in<=12'b0;
         #500 keypad_in<=12'b001000000000; //*
         #100 keypad_in<=12'b0;
-        #10000 enable<=4'b1000;
-        #10000 enable<=4'b0001;
+        #10000 enable<=4'b1000;//clockmode
+        #10000 enable<=4'b0001;//alarm
         #500 keypad_in<=12'b000000000001; //1
         #100 keypad_in<=12'b0;
         #500 keypad_in<=12'b100000000000; //#
@@ -75,8 +75,10 @@ module testbench;
         #100 keypad_in<=12'b0;
         #500 keypad_in<=12'b001000000000; //*
         #100 keypad_in<=12'b0;
+        #100000000;
         #30000 switch<=1;
-        #10000;
+        enable<=4'b1000;
+        #100000;
         $finish;
     end
 endmodule

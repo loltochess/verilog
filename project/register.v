@@ -9,6 +9,7 @@ module register(clk, rst, in, en, out);
     end
     else begin
       if (en) out <= in;
+      else out<=4'bx;
     end
   end
 endmodule
